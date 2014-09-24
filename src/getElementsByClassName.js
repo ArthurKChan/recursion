@@ -5,5 +5,13 @@
 
 // But instead we're going to implement it from scratch:
 var getElementsByClassName = function(className){
-  // your code here
-};
+  var result = [], selector;
+  arguments[1] ? selector=arguments[1] : selector=document.body;
+  if(Array.prototype.indexOf.call(selector.classList, className) !== -1){
+    result.push(selector);
+  }
+  for(var i=0; i<selector.children.length; i++){
+    result = result.concat(getElementsByClassName(className,selector.children[i]));
+  }
+  return result;
+}
