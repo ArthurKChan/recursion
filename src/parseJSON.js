@@ -99,6 +99,7 @@ function isBase(token){
 function tokenize(_st){
   var list = [], st = new Array(), token, loop_condition=true;
   st = _st.split('');
+
   token = st.shift();
   /* shift off tokens from st and push them into list */
 
@@ -108,7 +109,7 @@ function tokenize(_st){
       loop_condition = false;
     }
 
-    while ( (/\s/).test(token) ){
+    while ( (/\u0020/).test(token) ){
       /* remove whitespaces */
       token = st.shift();
     }
@@ -134,11 +135,22 @@ function tokenize(_st){
       var temp = [];
       token = st.shift();
       while ( token !== '"' ){
+
         if(st.length === 0){
           throw new SyntaxError('Expected a closing " mark');
         }
-        temp.push(token);
-        token = st.shift();
+
+        /* Deal w/ ESCAPE CHARACTERS */
+        if( token === '\\' ){
+          token = st.shift();
+          temp.push(token);
+          token = st.shift();
+        }
+
+        else{ /* Normal character */
+          temp.push(token);
+          token = st.shift();
+        }
       }
       list.push(temp.join(''));
       token = st.shift();
@@ -175,6 +187,10 @@ function tokenize(_st){
       if(temp.join('') !== 'false'){ throw new SyntaxError('Expected to be true'); }
       token = st.shift();
       list.push(false);
+    }
+    else if( ( /[\u0008\u0009\u000A\u000B\u000C\u000D\u0020]/ ).test(token) )   {
+      /* DEAL with ESCAPE SEQUENCES */
+      token = st.shift();
     }
 
     else{
