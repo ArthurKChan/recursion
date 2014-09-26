@@ -31,3 +31,6 @@ node_modulessrc/stringifyJSON.js~
 /src/stringifyJSON.js~
 /src/getElementsByClassName.js~
 /src/parseJSON.js~
+/spec/fixtures.js~
+/spec/parseJSONSpec.js~
+.gitignore~
